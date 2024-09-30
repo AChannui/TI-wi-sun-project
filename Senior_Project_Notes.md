@@ -1,4 +1,4 @@
-# Senior Project Wi-Sun Notes
+# Senior Project Notes
 
 Personal notes - Alex Chan-Nui
 
@@ -71,7 +71,7 @@ from Caden's email downloaded the new images of the boarder router and nodes for
 
 L45002UP (2UP) flashed with nodes image
 
-### Setup Guild
+### TI Wi-SUN FAN Fundamentals Guide 
 
 Following setup guild
 from [TI Wi-SUN FAN Fundamentals](https://dev.ti.com/tirex/explore/node?node=A__AEC7OIp.3CPq3lrOwxTFog__com.ti.SIMPLELINK_ACADEMY_CC13XX_CC26XX_SDK__AfkT0vQ__6.40.00.00)
