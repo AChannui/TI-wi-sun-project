@@ -2,7 +2,7 @@
 
 Personal notes - Alex Chan-Nui
 
-## 9/28
+## 9/28/2024
 
 ### Update XDS110 Probe
 
@@ -57,7 +57,7 @@ firmware flash complete message
 ./xdsdfu -f <firmware file> -r
 ```
 
-## 9/29
+## 9/29/2024
 
 ### Flash LPs
 
@@ -71,7 +71,7 @@ from Caden's email downloaded the new images of the boarder router and nodes for
 
 L45002UP (2UP) flashed with nodes image
 
-### TI Wi-SUN FAN Fundamentals Guide 
+### TI Wi-SUN FAN Fundamentals Guide
 
 Following setup guild
 from [TI Wi-SUN FAN Fundamentals](https://dev.ti.com/tirex/explore/node?node=A__AEC7OIp.3CPq3lrOwxTFog__com.ti.SIMPLELINK_ACADEMY_CC13XX_CC26XX_SDK__AfkT0vQ__6.40.00.00)
@@ -132,8 +132,48 @@ when in spinal use command below to check if node is border router and will erro
 connecteddevices
 ```
 
-when connecting router node (RN) it will take a few minutes for it to return connected 
+when connecting router node (RN) it will take a few minutes for it to return connected
 
 **Please Note** - wisunstack will show stop even after a start command it given. Will show start after connected
 
 **Please Note** - when RN connects to border router (BR) the RN will not display IP address
+
+Question: where to get good cases for LPs
+
+### wfantund Guild
+
+Following [wfantund guild](https://github.com/TexasInstruments/ti-wisunfantund/blob/release/INSTALL.md)
+
+use all processors
+
+```commandline
+make -j $(nproc)
+```
+
+additional instruction for beagleplay setup **good to know**
+
+Follow instructions at wfandtund guild for download and build instructions
+
+this command will bring up wfantund with BR
+
+check BR ttyS number before running command
+
+```commandline
+sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS1
+```
+
+used to control wfantund
+
+```commandline
+sudo /usr/local/bin/wfanctl
+```
+
+commands below bring up wfantund after running command above
+
+```commandline
+sudo wfanctl set interface:up true
+sudo wfanctl set stack:up true
+```
+
+after starting up wfantund you can start up the connection between the BR and RN just bring up the RN like shown in
+above section. after that is complete you can ping the RN ip address from the host machine
