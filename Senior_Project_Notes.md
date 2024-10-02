@@ -71,7 +71,7 @@ from Caden's email downloaded the new images of the boarder router and nodes for
 
 L45002UP (2UP) flashed with nodes image
 
-### TI Wi-SUN FAN Fundamentals Guide
+### TI Wi-SUN FAN Fundamentals Guide (spinal)
 
 Following setup guild
 from [TI Wi-SUN FAN Fundamentals](https://dev.ti.com/tirex/explore/node?node=A__AEC7OIp.3CPq3lrOwxTFog__com.ti.SIMPLELINK_ACADEMY_CC13XX_CC26XX_SDK__AfkT0vQ__6.40.00.00)
@@ -90,7 +90,7 @@ different USB ports**
 SDK Path :
 
 ```commandline
-cd ~/ti/simplelink_cc13xx_cc26xx_sdk_7_41_00_17/tools/ti_wisunfan
+cd ~/ti/simplelink_cc13xx_cc26xx_sdk_7_41_00_17/tools/ti_wisunfan/pyspinel_repo/ti-wisunfan-pyspinel
 ```
 
 ran command below can run help command but errors out with running ncpversion command
@@ -132,6 +132,20 @@ when in spinal use command below to check if node is border router and will erro
 connecteddevices
 ```
 
+must run following commands before using wfanctrl on boarder router
+
+```commandline
+ifconfig up
+```
+
+```commandline
+wisunstack start
+```
+
+```commandline
+routerstate
+```
+
 when connecting router node (RN) it will take a few minutes for it to return connected
 
 **Please Note** - wisunstack will show stop even after a start command it given. Will show start after connected
@@ -156,7 +170,7 @@ Follow instructions at wfandtund guild for download and build instructions
 
 this command will bring up wfantund with BR
 
-check BR ttyS number before running command
+check BR ttyS number before running command - must also exit spinal if connected to BR before running
 
 ```commandline
 sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS1
@@ -177,3 +191,67 @@ sudo wfanctl set stack:up true
 
 after starting up wfantund you can start up the connection between the BR and RN just bring up the RN like shown in
 above section. after that is complete you can ping the RN ip address from the host machine
+
+## 10/01/2024
+
+### Failed boot up of wfantund
+
+**Must bring BR up with wfanctl**
+
+if not you will see "garbage on the line" from wfantund
+
+reset with command below with spinal on the BR after stopping all wfantund and wfanctl
+
+```commandline
+reset
+```
+
+gets ip addresses of connected devices
+
+```commandline
+get connecteddevices
+```
+
+see all ipv6 addresses in the BR in wfantund
+
+```commandline
+get IPv6:AllAddresses
+```
+
+can't type b letter in spinal - reason unknown
+
+Issue: find a way to talk to LPs through USB `ttyACM<number>` and not through serial port
+
+### boot up instructions
+
+first boot up wfantund
+
+first should be done in one terminal
+
+```commandline
+sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS1
+```
+
+These commands should be done in another
+
+```commandline
+sudo wfanctl set interface:up true
+sudo wfanctl set stack:up true
+```
+
+these command should be done on the RN in a separate terminal as well
+
+```commandline
+python3 spinel-cli.py -u /dev/ttyS<Number>
+```
+
+```commandline
+ifconfig up
+wisunstack start
+```
+
+after all those are completed ping the RN address from the host by using the following command in wfanctl to find the address
+
+```commandline
+get connecteddevices
+```
