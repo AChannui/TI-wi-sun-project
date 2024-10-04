@@ -250,8 +250,50 @@ ifconfig up
 wisunstack start
 ```
 
-after all those are completed ping the RN address from the host by using the following command in wfanctl to find the address
+after all those are completed ping the RN address from the host by using the following command in wfanctl to find the
+address
 
 ```commandline
 get connecteddevices
 ```
+
+## 10/02/2024
+
+### Kea Quick Start
+
+Following [kea quick start guide](https://kea.readthedocs.io/en/latest/arm/quickstart.html)
+
+failed openssl test when running ./configure
+
+found correct package by checking config.log - then reading configure at the line where error occurred
+
+installed libssl-dev
+
+failed test - configure: error: Missing required header file (logger.h) from the log4cplus package
+
+installed liblog4cplus-dev
+
+installed libboost-system-dev
+
+### After Meeting
+
+tried building Kea dhcp server - not enough space in VM
+
+needed to add space in vm
+
+copied VM's VDI to resize
+
+tried to resize VDI using Ubuntu VM but didn't boot well
+
+downloaded system rescue ISO to boot into so I could run parted, resizepart, resize2fs and e2fsck on the VDI
+
+once done was able to attach the new VDI to the VM 
+
+
+
+## 10/04/2024
+communicated with Caden so that we have new LP firmware to work with external DHCP servers
+
+### Kea Quick Start Continued 
+built Kea 
+
