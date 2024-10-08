@@ -229,20 +229,25 @@ first boot up wfantund
 first should be done in one terminal
 
 ```commandline
-sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS1
+sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyACM<number>
 ```
 
 These commands should be done in another
+```commandline
+sudo wfanctl 
+```
 
 ```commandline
-sudo wfanctl set interface:up true
-sudo wfanctl set stack:up true
+set interface:up true
+```
+```commandline
+set stack:up true
 ```
 
 these command should be done on the RN in a separate terminal as well
 
 ```commandline
-python3 spinel-cli.py -u /dev/ttyS<Number>
+spinel-cli.py -u /dev/ttyACM<number>
 ```
 
 ```commandline
@@ -297,3 +302,21 @@ communicated with Caden so that we have new LP firmware to work with external DH
 ### Kea Quick Start Continued 
 built Kea 
 
+## 10/08/2024
+### VM USB work around 
+changed USB settings in VM to USB3 
+
+added filter of USB device - deleted all but 
+- name
+- vendor id
+- product id
+- port
+- remote = no
+
+shut down Virtualbox fully after added filter
+
+assume first connection is the correct connection
+
+use pyspinal to check if port `ACM<number>` accepts commands
+
+Question - what does the second connection do? why is it there?
