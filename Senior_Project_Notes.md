@@ -173,7 +173,7 @@ this command will bring up wfantund with BR
 check BR ttyS number before running command - must also exit spinal if connected to BR before running
 
 ```commandline
-sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS1
+sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyS0
 ```
 
 used to control wfantund
@@ -229,7 +229,7 @@ first boot up wfantund
 first should be done in one terminal
 
 ```commandline
-sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyACM<number>
+sudo wfantund -o Config:NCP:SocketPath /dev/wisun-br0
 ```
 
 These commands should be done in another
@@ -354,8 +354,53 @@ udevadm info /dev/ttyACM<number>
 
 created a sim link script to create simlinks of the ports used by the LPs - simlinks used in all scripts
 
-created script to start up the wfantund - **NOTE** when piping into wfanctl from commandline wfanctl will error out
+created script to start up the BR and RN - **NOTE** when piping into wfanctl from commandline wfanctl will error out
+
+edited startup script so that the wfantund needs to be started in separate terminal
 
 created script to shutdown wfantund and reset LPs
 
+created script to print status of BR and RN
+
 ### dnsmasq boot
+
+following [external servers README](https://github.com/AChannui/ti-wisunfantund-UTD/tree/feature-external-dhcp-server/external-servers)
+
+installed docker-compose
+
+commands with `docker compose` don't work need to say `docker-compose`
+
+```commandline
+docker-compose build
+```
+
+```commandline
+docker-compose run --rm dnsmasq
+```
+
+encountered error:
+`/bin/sh: 1: sudo: not found
+ERROR: Service 'dnsmasq' failed to build : The command '/bin/sh -c sudo apt update && sudo apt install -y nano iproute2 curl systemctl' returned a non-zero code: 127`
+
+fixed by deleting sudo in Dockerfile
+
+Question: let caden know that sudo is not needed in Dockerfile in dnsmasq
+
+get access to IPv6 leases with docker - this command gets you into the docker
+
+```commandline
+docker exec -it <CONTAINER ID> /bin/sh
+```
+
+lease in file bellow
+
+```commandline
+/var/lib/misc/dnsmasq.leases
+```
+started wfantund with external DHCP server dnsmasq
+
+learned about arguments used in Dockerfile
+
+created a dnsmasq.conf using the arguments from the Dockerfile
+
+edited Dockerfile again to use the new dnsmasq.conf file I created 
