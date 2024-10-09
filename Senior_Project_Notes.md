@@ -233,6 +233,7 @@ sudo /usr/local/sbin/wfantund -o Config:NCP:SocketPath /dev/ttyACM<number>
 ```
 
 These commands should be done in another
+
 ```commandline
 sudo wfanctl 
 ```
@@ -240,6 +241,7 @@ sudo wfanctl
 ```commandline
 set interface:up true
 ```
+
 ```commandline
 set stack:up true
 ```
@@ -292,21 +294,24 @@ tried to resize VDI using Ubuntu VM but didn't boot well
 
 downloaded system rescue ISO to boot into so I could run parted, resizepart, resize2fs and e2fsck on the VDI
 
-once done was able to attach the new VDI to the VM 
-
-
+once done was able to attach the new VDI to the VM
 
 ## 10/04/2024
+
 communicated with Caden so that we have new LP firmware to work with external DHCP servers
 
-### Kea Quick Start Continued 
-built Kea 
+### Kea Quick Start Continued
 
-## 10/08/2024
-### VM USB work around 
-changed USB settings in VM to USB3 
+built Kea
 
-added filter of USB device - deleted all but 
+## 10/07/2024
+
+### VM USB work around
+
+changed USB settings in VM to USB3
+
+added filter of USB device - deleted all but
+
 - name
 - vendor id
 - product id
@@ -320,3 +325,37 @@ assume first connection is the correct connection
 use pyspinal to check if port `ACM<number>` accepts commands
 
 Question - what does the second connection do? why is it there?
+
+## 10/08/2024
+
+cloned [ti-wisunfantund-UTD](https://github.com/AChannui/ti-wisunfantund-UTD) fork
+
+rebuilding wfantund see **wfantund Guild** under **9/28/2024**
+
+### kea Quick start Cont.
+
+using keactrl started up kea dhcp IPv6 version
+
+```commandline
+sudo keactrl start -s dhcp6
+```
+
+Flashed boards with new firmware
+
+### create startup shell scripts
+
+how to get info on usb port
+
+```commandline
+udevadm info /dev/ttyACM<number>
+```
+
+**all scripts assume 2 devices**
+
+created a sim link script to create simlinks of the ports used by the LPs - simlinks used in all scripts
+
+created script to start up the wfantund - **NOTE** when piping into wfanctl from commandline wfanctl will error out
+
+created script to shutdown wfantund and reset LPs
+
+### dnsmasq boot
