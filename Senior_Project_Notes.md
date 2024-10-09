@@ -362,6 +362,40 @@ created script to shutdown wfantund and reset LPs
 
 created script to print status of BR and RN
 
+### boot up and shut down instructions external dnsmasq
+
+1. run sim_link_setup.sh
+
+```commandline
+~/senior_project/sim_link_setup.sh
+```
+
+2. start wfantund and dnsmasq commands bellow uses separate terminals
+
+```commandline
+sudo wfantund -o Config:NCP:SocketPath /dev/wisun-br0
+```
+
+```commandline
+cd ~/ti-wisunfantund-UTD/external-servers
+```
+
+```commandline
+docker-compose run --rm dnsmasq
+```
+
+3. OPTIONAL run status.sh
+
+```commandline
+~/senior_project/status.sh
+```
+
+4. run shutdown.sh and you will need to kill dnsmasq manually
+
+```commandline
+~/senior_project/shutdown.sh
+```
+
 ### dnsmasq boot
 
 following [external servers README](https://github.com/AChannui/ti-wisunfantund-UTD/tree/feature-external-dhcp-server/external-servers)
@@ -397,6 +431,7 @@ lease in file bellow
 ```commandline
 /var/lib/misc/dnsmasq.leases
 ```
+
 started wfantund with external DHCP server dnsmasq
 
 learned about arguments used in Dockerfile
