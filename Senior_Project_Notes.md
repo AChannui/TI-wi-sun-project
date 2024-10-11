@@ -377,6 +377,10 @@ sudo wfantund -o Config:NCP:SocketPath /dev/wisun-br0
 ```
 
 ```commandline
+~/senior_project/startup.sh
+```
+
+```commandline
 cd ~/ti-wisunfantund-UTD/external-servers
 ```
 
