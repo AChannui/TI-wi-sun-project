@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# came from simplelink dir
+# use to download pyspinel
+
 repoDir="pyspinel_repo"
 mkdir -p $repoDir
 cd $repoDir
