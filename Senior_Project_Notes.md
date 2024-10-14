@@ -442,4 +442,63 @@ learned about arguments used in Dockerfile
 
 created a dnsmasq.conf using the arguments from the Dockerfile
 
-edited Dockerfile again to use the new dnsmasq.conf file I created 
+edited Dockerfile again to use the new dnsmasq.conf file I created
+
+## 10/11/2024
+
+set up working environment on beelink - scripts don't work properly must bring up and down by hand
+
+helped larry download wfantund and tried to solve issue with XDS110 prob but couldn't find solution -
+
+status while loop to check rn
+
+```commandline
+while sleep 1 ; do echo $(date) $(echo "routerstate" | spinel-cli.py -u /dev/wisun-rn0) ; done 
+```
+
+## 10/12/2024
+
+convert json to yml for easier editing
+
+```commandline
+cat kea-dhcp6.conf | grep -v " *//" | yq -y . >| ~/tmp1
+```
+
+convert back to json
+
+```commandline
+yq . < tmp1 > tmp1.json
+```
+
+## 10/13/2024
+
+wrote kea-dhcp6.conf - not working kea wont lease out addresses - kea will reposond to wfandtund
+
+```commandline
+sudo kea-dhcp6 -c tmp1.json 
+```
+
+I think the issue is I might be shutting down the dhcp server to quickly or wanting a response to quickly - possible
+next time is to time how long it takes the RN to get a lease from dnsmasq
+
+timed how long it takes for RN to go from state 4 to state 5 from dnsmasq server response using wireshark - ~8 seconds
+
+time was not the issue
+
+saved relpy packet from dnsmasq and kea and looking into differences
+
+| Difference                 | dnamasq   | Kea           |
+|----------------------------|-----------|---------------|
+| IPv6 - Traffic class, DSCP | 0xc0, CS6 | 0x00, CS0     |
+| Message Type               | Reply (7) | Advertise (9) |
+
+difference in message type due to the 4-way exchange procedure solicit, advertise, request, reply
+
+fix - add rapid-commit: true to subnet setting to skip advertise and request steps
+
+After enabling rapid commit kea now leases addresses and RN returns state 5
+
+Next task - dockerize kea - look at dnsmasq Dockerfile - figure out what is needed
+
+wrote initial version of Dockerfile using apt install kea-dhcp6-server - old 2.0.2 version of kea - ran into issue of
+not supporting part of config file - next step write docker to use source instead
