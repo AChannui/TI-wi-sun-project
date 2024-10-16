@@ -154,9 +154,9 @@ when connecting router node (RN) it will take a few minutes for it to return con
 
 Question: where to get good cases for LPs
 
-### wfantund Guild
+### wfantund Guide
 
-Following [wfantund guild](https://github.com/TexasInstruments/ti-wisunfantund/blob/release/INSTALL.md)
+Following [wfantund guide](https://github.com/TexasInstruments/ti-wisunfantund/blob/release/INSTALL.md)
 
 use all processors
 
@@ -502,3 +502,21 @@ Next task - dockerize kea - look at dnsmasq Dockerfile - figure out what is need
 
 wrote initial version of Dockerfile using apt install kea-dhcp6-server - old 2.0.2 version of kea - ran into issue of
 not supporting part of config file - next step write docker to use source instead
+
+## 10/14/2024
+
+found ADD command for Dockerfile - use # after git ssh link to specify branch
+
+wrote working Dockerfile for kea dhcp server
+
+build kea docker
+
+```commandline
+docker build --progress=plain -t alex-kea kea 
+```
+
+start up kea docker
+
+```commandline
+docker run --rm --net=host alex-kea
+```
