@@ -542,7 +542,7 @@ could set lease time to short -
 ## 10/19/2024
 
 successfully built kea with working reserved address - issue was that the reservation was global and not put inside the
-subnet - fixed the issue and moved it into subnet **NOTE** do not forget to rebuild the Docker when changing conf file
+subnet. default reservation-state is all which ignores global reservations- fixed the issue and moved it into subnet **NOTE** do not forget to rebuild the Docker when changing conf file
 
 wrote new shell script to remove kea-conf.json and remake it with updated kea-conf.yml and builds the docker with the
 new kea-conf.json. The script then runs kea
