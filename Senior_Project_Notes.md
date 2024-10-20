@@ -520,3 +520,34 @@ start up kea docker
 ```commandline
 docker run --rm --net=host alex-kea
 ```
+
+## 10/15/2024
+
+usb power cycle on remote host
+
+can also do `/dev/tty<number>` or `/dev/wisun-<thing>`
+
+```commandline
+usbpower.py -r 1,2
+```
+
+## 10/18/2024
+
+second port used for other project
+
+don't need to shut the whole thing down - to make
+
+could set lease time to short -
+
+## 10/19/2024
+
+successfully built kea with working reserved address - issue was that the reservation was global and not put inside the
+subnet - fixed the issue and moved it into subnet **NOTE** do not forget to rebuild the Docker when changing conf file
+
+wrote new shell script to remove kea-conf.json and remake it with updated kea-conf.yml and builds the docker with the
+new kea-conf.json. The script then runs kea
+
+next steps should be preparing for demo of ramp up tasks on the 10/23/2024 with better shell scripts. That means making
+shell scripts to do each part like one to start wfantund, one to do what the current start up script is doing and lastly
+stating kea / dnsmasq
+
