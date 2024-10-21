@@ -542,7 +542,8 @@ could set lease time to short -
 ## 10/19/2024
 
 successfully built kea with working reserved address - issue was that the reservation was global and not put inside the
-subnet. default reservation-state is all which ignores global reservations- fixed the issue and moved it into subnet **NOTE** do not forget to rebuild the Docker when changing conf file
+subnet. default reservation-state is all which ignores global reservations- fixed the issue and moved it into subnet *
+*NOTE** do not forget to rebuild the Docker when changing conf file
 
 wrote new shell script to remove kea-conf.json and remake it with updated kea-conf.yml and builds the docker with the
 new kea-conf.json. The script then runs kea
@@ -551,3 +552,27 @@ next steps should be preparing for demo of ramp up tasks on the 10/23/2024 with 
 shell scripts to do each part like one to start wfantund, one to do what the current start up script is doing and lastly
 stating kea / dnsmasq
 
+## 10/20/2024
+
+send command to other terminal. used in tmux scripts
+
+```commandline
+tmux send-keys -t '.0' <command>
+```
+
+NOCR when set to one will not have the character turn to run the scripts automatically.
+
+```commandline
+NOCR=1
+```
+
+for pushing to TI-wi-sun-project use command below to pull rebase then use git push
+
+```commandline
+git pull --rebase
+```
+
+wrote new shell scripts so it is easier for my team and myself to bring up the network - the new scripts are numbered
+and to take command line options for custom paths
+
+wrote tmux start up and shutdown shell scripts so that starting up and shutting down the network is very easy
