@@ -576,3 +576,72 @@ wrote new shell scripts so it is easier for my team and myself to bring up the n
 and to take command line options for custom paths
 
 wrote tmux start up and shutdown shell scripts so that starting up and shutting down the network is very easy
+
+## 10/29/2024
+
+edited kea-conf to run external script hook
+
+enters docker image without having to copy and paste
+
+```commandline
+docker exec -it $(docker ps -qf "ancestor=alex-kea") bash
+```
+
+## 11/3/2024
+
+starting working on figuring out the mac address [hook github](https://github.com/serverzone/Kea-dhcp-hooks/tree/master)
+
+I also commented out the test line in the CMake because I didn't not download gtest
+
+one error when trying to build was that I was not able to run the compile.sh script because it could not find the
+hooks/hooks.h file
+
+the solution to this is to sym link the kea build into the third
+
+```commandline
+ln -sf <path to kea> kea
+```
+
+got hook github built after some small trouble with the CMake library paths
+
+new issue - 2024-11-04 02:21:48.629 ERROR [kea-dhcp6.dhcp6/1662238.134517153421184] DHCP6_INIT_FAIL failed to initialize
+Kea server: configuration error using file 'kea-conf.json': hooks libraries failed to validate - library or libraries in
+error are: /usr/local/lib/kea/hooks/libmac2ipv6.so (kea-conf.json:85:5)
+
+getting failed to validate new hook library - unknown cause -
+
+tried to add print debugging to the src of the kea but it
+will take a long time to debug due to long build time - running on non docker kea to maybe speed up debugging - in
+theory it should be easier to debug -
+
+tried upping logging but logs wont come out of stdout when assigned and messages are sill the same even with elevated
+debugging levels - even when point to a file kea will still not create one. I believe this is due to how early the fail
+is happening and I'm lost
+
+grep for error in src and added a error throw at the start of the file to see if it even works - not even getting to
+it - unknown where this error is being called
+
+## 11/05/2024
+
+figure out it issue with yaml file and setting up the reporting of logging - set severity to DEBUG and debug level to 99
+
+was able to figure out that the multi threading
+problem - [this website](https://reports.kea.isc.org/dev_guide/df/d46/hooksdgDevelopersGuide.html) go to the section
+**The "multi_threading_compatible" function** and addd the multi_threading compatible.cc file to the src directory of
+the kea-dhcp-hooks
+
+the issue is that kea needs to know if the hook is multi threading safe or not and without the hook declaring either way
+the kea will invalidate the hook library
+
+was able to log the new address out and also changed logging to see - HOOKS_CALLOUT_EXCEPTION exception thrown by
+callout on hook lease6_select registered by library with index 1 (callout address 0x715d835ea2e2): Failed to convert
+string to address '2020:abcd:0000:0212:4bff:fe00:29bd7e45': Invalid argument (callout duration: 0.527 ms)
+
+the error is that the address is malformed the fix for this is to modify the mac2ip.cc in the Kea-dhcp-hooks
+
+fixed the error of the malformed address - on line 38 in mac2ip.cc change the 5 to 6
+
+after trying to ping the address it didn't work I believe this is due to the address pool being to restrictive in the
+yaml - up side to all of this though is that the RN is consistently getting the same address assigned to it
+
+after reconfiguring the address pool in the yaml this was not the case
