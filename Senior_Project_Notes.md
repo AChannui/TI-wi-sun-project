@@ -645,3 +645,48 @@ after trying to ping the address it didn't work I believe this is due to the add
 yaml - up side to all of this though is that the RN is consistently getting the same address assigned to it
 
 after reconfiguring the address pool in the yaml this was not the case
+
+## 11/07/2024
+
+to run gdb on kea you need to source the correct kea build to do that you need to run source on the loadpath file - that
+will point the kea to use the correct kea build
+
+```commandline
+source loadpath
+```
+
+you can check where it is getting the files with ldd - this will print out the libraries and where they are getting them
+from
+
+```commandline
+ldd <path to kea / executable> 
+```
+
+then you need to use nm which gets the names of the items in the object file / gets function names - used to get
+function signatures to set break points in gdb
+
+c++filt just makes the output of nm more readable
+
+```commandline
+nm <libarary path> | c++filt | grep <function name>
+```
+
+## 11/11/2024
+
+got gdb working with kea. ran down the problem of infinite looping to be that the tmp file created for the kea database.
+if the lease is not expired it will end up in an infinite loop.
+
+found that the reason the ping is not working is that the prefix is too long for the ip route. need to change it from 64
+to 32 for the ping to work
+
+need to fix kea so that if the address is in the lease database so that they
+
+fix wfantund so that the ip6 route has 32 bit prefix not 64 bit prefix
+
+## 11/12/2024
+
+TunnelIPv6Interface.cpp line 614 - add_address(&test_addr, 64) 
+
+change the 64 to 32 - didn't work unknown why - next steps run with gdb and see how its taking in the prefix length
+
+I know the test_addr effects the name of the route in the route table. unknown why it is not working.
