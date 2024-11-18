@@ -685,8 +685,30 @@ fix wfantund so that the ip6 route has 32 bit prefix not 64 bit prefix
 
 ## 11/12/2024
 
-TunnelIPv6Interface.cpp line 614 - add_address(&test_addr, 64) 
+TunnelIPv6Interface.cpp line 614 - add_address(&test_addr, 64)
 
 change the 64 to 32 - didn't work unknown why - next steps run with gdb and see how its taking in the prefix length
 
 I know the test_addr effects the name of the route in the route table. unknown why it is not working.
+
+## 11/13/2024
+
+after meeting Caden emailed me where the other network is hard coded with a 64 bit prefix. wfantund now starts with a 32
+bit network
+
+## 11/16/2024
+
+memfile_lease_mgr.cc - found issue was with the check on the status returning false for the address. The fix found for
+this is to assign the fake_allocation var to be true. This is done in the lease6_select.cc in the hook dir.
+
+Implementing change said above kea with hook works with assignment of lease and pings
+
+## 11/17/2024
+
+dockerized the kea hook by forking the github and adding it to the Dockerfile in the external-servers/kea dir.
+
+Also fix up Dockerfile to have as minimal layers in it as possible.
+
+After the change above were done and checks on it were completed I can now say that the Kea Hook task are done per the
+TI slides. yippee \ (•◡•) /
+
