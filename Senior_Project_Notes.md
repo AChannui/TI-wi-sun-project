@@ -71,7 +71,7 @@ from Caden's email downloaded the new images of the boarder router and nodes for
 
 L45002UP (2UP) flashed with nodes image
 
-### TI Wi-SUN FAN Fundamentals Guide (spinal)
+### TI Wi-SUN FAN Fundamentals Guide (spinel)
 
 Following setup guild
 from [TI Wi-SUN FAN Fundamentals](https://dev.ti.com/tirex/explore/node?node=A__AEC7OIp.3CPq3lrOwxTFog__com.ti.SIMPLELINK_ACADEMY_CC13XX_CC26XX_SDK__AfkT0vQ__6.40.00.00)
@@ -712,3 +712,84 @@ Also fix up Dockerfile to have as minimal layers in it as possible.
 After the change above were done and checks on it were completed I can now say that the Kea Hook task are done per the
 TI slides. yippee \ (•◡•) /
 
+## 11/24/2024
+
+did previous work forgot to write notes
+
+installed following libs in sysroot
+
+- libdbus-1-dev
+- libsystemd-dev
+- libreadline-dev
+- libboost-system1.81-dev
+- libboost1.81-dev
+- liblog4cplus-dev
+
+found that wfantund builds on beagleplay
+
+## 11/25/2024
+
+deferring cross compiling
+
+started setting up beagleplay booting of micro sd card
+
+booting off sd card needed to read off serial usb
+
+## 11/27/2024
+
+installing wfantund and building on beagleplay
+
+install .deb file with apt
+
+```commandline
+sudo apt install <package.deb>
+```
+
+installing kea packages
+
+- [isc-kea-dhcp6](https://cloudsmith.io/~isc/repos/kea-2-6/packages/detail/deb/isc-kea-dhcp6/2.6.1-isc20240725093407/a=arm64;xc=main;d=debian%252Fbookworm;t=binary/)
+- [isc-kea-common](https://cloudsmith.io/~isc/repos/kea-2-6/packages/detail/deb/isc-kea-common/2.6.1-isc20240725093407/a=arm64;xc=main;d=debian%252Fbookworm;t=binary/)
+
+## 11/29/2024
+
+kea-dhcp-hooks-UTD failed compile.sh because hooks/hooks.h was not found
+
+installing kea packages cont.
+
+- [isc-kea-hooks](https://cloudsmith.io/~isc/repos/kea-2-6/packages/detail/deb/isc-kea-hooks/2.6.1-isc20240725093407/a=arm64;xc=main;d=debian%252Fbookworm;t=binary/)
+- [isc-kea](https://cloudsmith.io/~isc/repos/kea-2-6/packages/detail/deb/isc-kea/2.6.1-isc20240725093407/a=arm64;xc=main;d=debian%252Fbookworm;t=binary/)
+
+isc-kea has hooks/hooks.h - added /usr/include/kea to include_directories in CMakeLists.txt
+
+rewrote 30-kea-start.sh script to handle options. Also added option for local kea start with config file.
+
+need to disable package from starting with systemctl disable <process> rewrote 30-kea-start.sh script to handle options.
+Also added option for local kea start with config file.
+
+## 12/01/2024
+
+following [stork quick start](https://kb.isc.org/docs/stork-quickstart-guide)
+
+installing stork packages for bookworm on BP
+
+- [isc-stork-agent](https://cloudsmith.io/~isc/repos/stork/packages/detail/deb/isc-stork-agent/2.0.0.241112162746/a=arm64;xc=main;d=any-distro%252Fany-version;t=binary/)
+- [isc-stork-server](https://cloudsmith.io/~isc/repos/stork/packages/detail/deb/isc-stork-server/2.0.0.241112162749/a=arm64;xc=main;d=any-distro%252Fany-version;t=binary/)
+- [isc-stork-hooks](https://cloudsmith.io/~isc/repos/stork/packages/detail/deb/isc-stork-server-hook-ldap/2.0.0.241112162811/a=arm64;xc=main;d=any-distro%252Fany-version;t=binary/)
+
+installing postgresql - package name postgresql - used apt
+
+got stork server and stork agent started but unable to see kea this is because the kea control agent is not active
+
+installed [isc-kea-ctrl-agent](https://cloudsmith.io/~isc/repos/kea-2-6/packages/detail/deb/isc-kea-ctrl-agent/2.6.1-isc20240725093407/a=arm64;xc=main;d=debian%252Fbookworm;t=binary/(https://cloudsmith.io/~isc/repos/stork/packages/detail/deb/isc-stork-server-hook-ldap/2.0.0.241112162811/a=arm64;xc=main;d=any-distro%252Fany-version;t=binary/))
+
+kea stork need to be run as sudo so that it is visible in stork
+
+```commandline
+sudo /usr/sbin/kea-ctrl-agent -c /etc/kea/kea-ctrl-agent.conf
+```
+
+use systemctl to bring up and down the stork
+
+```commandline
+sudo systemctl <command> <service>
+```
