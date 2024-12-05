@@ -1,9 +1,9 @@
 #!/bin/bash
 
-BR_SERIAL=L45002VL
+BR_SERIAL=L45002KZ
 BR_PORT=
 
-RN_SERIAL=L45002UP
+RN_SERIAL=L45002V6
 RN_PORT=
 
 for port in /dev/ttyACM*; do 

@@ -20,5 +20,5 @@ sleep 5
 tmux send-keys -t '.2' ./20-wfantund_configure.sh
 [[ -z "$NOCR" ]] && tmux send-keys -t '.2' C-m
 sleep 5
-tmux send-keys -t '.3' ./30-start_kea.sh
+tmux send-keys -t '.3' "sudo ./30-start_kea.sh -l -c /home/alex/ti-wisunfantund-UTD/external-servers/kea/kea-conf.yml"
 [[ -z "$NOCR" ]] && tmux send-keys -t '.3' C-m
